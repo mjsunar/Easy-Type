@@ -1,0 +1,145 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EasyType - Typing Practice</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f4f8;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 2px 12px #ccc;
+}
+
+h1 {
+    color: #2563eb;
+}
+
+#text {
+    background: #eef2ff;
+    padding: 15px;
+    font-size: 20px;
+    line-height: 1.6;
+    border-radius: 10px;
+}
+
+textarea {
+    width: 95%;
+    height: 120px;
+    padding: 10px;
+    font-size: 18px;
+    margin-top: 15px;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 17px;
+    margin: 10px;
+}
+
+.stats {
+    font-size: 20px;
+    margin: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>⌨️ EasyType</h1>
+<h3>English Typing Practice</h3>
+
+<p id="text">
+Practice makes a person perfect.
+Keep learning and improve your typing speed every day.
+</p>
+
+<div class="stats">
+Time: <span id="time">60</span> Seconds
+</div>
+
+<textarea id="input" placeholder="Start typing here..."></textarea>
+
+<div class="stats">
+Speed: <span id="speed">0</span> WPM
+</div>
+
+<button onclick="startTest()">Start Test</button>
+<button onclick="resetTest()">Reset</button>
+
+<p id="result"></p>
+
+</div>
+
+<script>
+let time = 60;
+let timer = null;
+let started = false;
+
+const input = document.getElementById("input");
+
+function startTest() {
+    if (started) return;
+
+    started = true;
+    input.disabled = false;
+    input.focus();
+
+    timer = setInterval(function() {
+        time--;
+        document.getElementById("time").textContent = time;
+
+        if (time <= 0) {
+            clearInterval(timer);
+            input.disabled = true;
+            document.getElementById("result").textContent =
+                "Test Finished! Your Speed: " +
+                document.getElementById("speed").textContent +
+                " WPM";
+        }
+    }, 1000);
+}
+
+input.addEventListener("input", function() {
+    let words = input.value.trim().split(/\s+/);
+    let count = input.value.trim() === "" ? 0 : words.length;
+    let elapsed = 60 - time;
+
+    let wpm = elapsed > 0 ?
+        Math.round(count / (elapsed / 60)) : 0;
+
+    document.getElementById("speed").textContent = wpm;
+});
+
+function resetTest() {
+    clearInterval(timer);
+    time = 60;
+    started = false;
+    input.value = "";
+    input.disabled = false;
+
+    document.getElementById("time").textContent = 60;
+    document.getElementById("speed").textContent = 0;
+    document.getElementById("result").textContent = "";
+}
+</script>
+
+</body>
+</html>
